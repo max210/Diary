@@ -58,9 +58,9 @@ node官网上有对`Event Loop`的[介绍](https://nodejs.org/en/docs/guides/eve
 这张图中，node中事件循环包括六个阶段，当主任务执行完之后，会依次进入这六个阶段
 
 * `timers` （处理setTimeout和setInterval的回调函数，主线程会检查一下当前时间，是否满足定时器的条件。如果满足就执行回调函数，否则就离开这个阶段。）
-* `I/O callbacks` （基本所有的异步回调函数都会在这里执行，除了setTimeout和setInterval、setImmediate、关闭请求的回调函数这三种）
+* `I/O callbacks` （执行一些错误的回调和上轮应该在poll执行而没有执行的回调）
 * `idle prepare` （这个阶段只供 libuv 内部调用，我们可以先忽略）
-* `Poll` （等待还未返回的 I/O 事件，如 读文件、浏览器的回应等）
+* `Poll` （等待还未返回的 I/O 事件，并执行回调，等待的过程中如果有timer到时间，那就进入timer阶段,如果有setImmediate，直接进入check阶段）
 * `check` （该阶段执行setImmediate()的回调函数）
 * `close callbacks` （该阶段执行关闭请求的回调函数，比如socket.on('close', ...)）
 
