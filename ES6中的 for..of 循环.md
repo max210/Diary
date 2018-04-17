@@ -1,4 +1,4 @@
-#### ES6中的`for...of`循环master
+#### ES6中的`for...of`循环master111
 
 ES6中新增了一个循环的方法，那就是`for...of`循环。
 
