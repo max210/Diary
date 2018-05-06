@@ -2,7 +2,7 @@
 
 学习优雅的函数式编程的库`ramda`，总结一下自己认为比较常用到的关于数组的方法
 
-`any`
+`all`
 
 数组每一项都满足条件，返回`true`, 否则返回`false`
 
@@ -12,12 +12,12 @@ import R from 'ramda'
 const arr = [1, 3, 4, 6]
 cosnt f = item => item < 10
 
-const newArr = R.any(f, arr)
+const newArr = R.all(f, arr)
 
 console.log(newArr)  // true
 ```
 
-`some`
+`any`
 
 数组其中一项都满足条件，返回`true`, 否则返回`false`
 
@@ -27,7 +27,7 @@ import R from 'ramda'
 const arr = [1, 3, 4, 6]
 cosnt f = item => item < 3
 
-const newArr = R.some(f, arr)
+const newArr = R.any(f, arr)
 
 console.log(newArr)  // true
 ```
