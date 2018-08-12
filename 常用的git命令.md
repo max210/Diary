@@ -1,20 +1,16 @@
+
 #### 常用的`git`命令
 
 学习和工作中都是用的`git`，整理一些常用的`git`用法
 
-* `git init` `git add .` `git commit -m " "`
+一个项目如果用git，首先要git初始化（`git init`），当文件修改之后用git追踪全部文件(`git add .`)，然后写入这次文件变更的信息(`git commit -m "you_message"`)，然后用`git log`就可以在本地查看你的commit历史记录，如果在多次commit后，如果要想回到指定commit版本，执行`git reset --hard commit_id`，commit_id执行`git log`可以查找到。
 
-一个项目要是用git，首先要git初始化(`git init`)，当文件修改之后用`git`追踪全部文件(`git add .`)，然后写入这次文件变更的信息(`git commit -m "you_message"`)
+实现多人协作，首先需要在github上新建一个仓库，与本地的代码关联`git remote add name ssh` name是自己对这个远程仓库在你本地取的名字，一般是origin，ssh是新建的远程仓库的ssh地址，执行命令后，远程的仓库与本地仓库已经关联了，`git remote -v`可以查看关联相关的信息。本地代码做修改后，`git add .` `git commit -m "your_message"` 后，就可以把本地代码推到远程仓库了（`git push name branch`）name是刚刚本地取的名字，branch是要推的分支名称，比如master。
 
-* `git pull` `git push`
+在公司中，一个仓库一般会有三个基本的分支，dev分支（用于开发测试），test分支（用于测试），master分支（线上代码）。首先fork公司的项目作为自己的远程仓库，然后克隆项目到本地（`git clone ssh `）ssh是自己远程仓库的ssh地址。一般接到一个需求，首先从master分支切出一个独立分支（`git checkout -b fun`）fun是分支的名字，等到开发完成后，把分支合并到dev分支上，然后拉取更新公司远程dev分支的代码（`git pull work dev`）work是公司的远程仓库在本地的名称，dev是要拉取的分支名称，在这里如果本地没有与公司远程仓库关联，执行`git remote add work ssh`做关联。拉取公司dev分支代码后，如有冲突，解决完冲突就可以push到自己的远程仓库了（`git push my dev`）my是公自己的远程仓库在本地的名称，dev是要push的分支名称。这样就可以向公司仓库提PR了，老大审完你的代码，就可以merge到公司的dev分支啦。不同的需求一般新建不同的分支，这样既可以保证需求代码的独立性，又能同步进行开发。
 
-当`commit`以后，我们要把我们本地的更改更新到`GitHub`上去(`git push`)，如果有同事已经更新了代码，你需要先(`git pull`)，如果没有冲突，然后就可以`push`上去你本地的代码，如果有冲突，需要解决冲突之后，然后commit信息后，再(`git push`)
-其实工作当中我们需要先fork公司代码到自己仓库，然后把自己仓库的代码clone到本地，更改代码并本地commit后，先获取公司最近到代码，(`git pull name branch`) name 是在你本地中公司远程的名字，branch是要更新公司代码的分支，更新好以后，再上传到自己仓库(`git push name branch`) name 是你本地中自己仓库远程的名字，branch是要推本地哪个分支，推上去之后，就可以提PR了，老大检查完代码，就可以把你改的代码merge到公司仓库了。
+![](./img/git.png)
 
-* `git checkout -b ` `git checkout ` `git merge ` `git branch -d `
+当需求上线后，可以删除本地这次需求的分支（`git branch -D fun`）
 
-当新增一个需求时，我们可以在`master`分支上新建一个dev分支(`git checkout -b dev`)，在`dev`分支上开发，开发并测试好了以后，切换到`master`分支(`git checkout master`)，然后再把`dev`分支的合并到master分支(`git merge dev`)，可以删除`dev`分支(`git branch -d dev`)
-
-* `git remote -v` `git remote add xxx ssh`
-
-第一个是查看现在这个项目关联了多少远程，第二个是增加关联到仓库，xxx自己规定名字，ssh是要关联到ssh地址。
+有时候公司仓库新增了一些分支，查看关联仓库所有分支（`git branch -a`），也无法获取新增分支的时候，需要fetch一下（`git fetch work new_branch`）work是公司的远程仓库在本地的名称，new_branch是公司仓库新增的分支名称，然后执行查看所有分支的命令，就可以看到了，这个时候新增的分支还没有在你本地，你只需要（`git checkout -b new work/new_branch`）就可以把公司new_branch分支的代码拉到本地名字为new的分支上了。
