@@ -214,19 +214,6 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(config => {
   config.headers['Content-Type'] = 'application/json;charset=utf-8'
-  config.headers['x-incar-token'] = getXIncarToken()
-  config.headers['x-incar-app-id'] = getXIncarAppId()
-
-  // 老网关走formdata形式
-  if (config.contentType === 'form') {
-    config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
-    config.data = transformRequest(config.data)
-  }
-
-  // 浏览器打开的网页请求
-  if (config.xIncarToken) {
-    config.headers['x-incar-token'] = config.xIncarToken
-  }
 
   return config
 }, error => {
@@ -310,6 +297,16 @@ let urlQuery = {
       i++
     }
     return result
+  }
+}
+```
+- 判断移动 PC
+```
+function isPC () {
+  if (/Android|webOS|iPhone|iPad|Windows Phone|SymbianOS|BlackBerry/i.test(navigator.userAgent)) {
+    return false
+  } else {
+    return true
   }
 }
 ```
