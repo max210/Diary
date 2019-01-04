@@ -12,7 +12,7 @@
 
 - `git commit -m ""` 提交更新
 
-- `git commit -am 'xxx'` 将add和commit合为一步
+- `git commit -am 'xxx'` 将add和commit合为一步, 但只能cover到已被track的文件
 
 - `git show commit_id` 显示某个提交的详细内容
 
@@ -25,8 +25,6 @@
 - `git remote -v` 查看本地关联的远程仓库
 
 - `git remote add xxx 地址` 关联远程仓库，名字为xxx
-
-- `git remote rm xxx` 移除名字为xxx的远程仓库
 
 - `git remote rename oldname newname` 修改远程仓库的名字
 
