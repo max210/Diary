@@ -2,7 +2,6 @@
 * 对db er模型的理解 mongodb mysql 对应的node模块， nginx事务，os 算法 数据结构 设计模式 编译原理   《node in action》 《深入浅出Node.js》 《更了不起的Node.js》
 * promise中有process.nextTick,promise先执行完在执行process.nextTick   这两个函数都是在六个循环阶段切换时执行  执行顺序简化为三个阶段，1.settimeout 2 异步IO 3 setimmediat（）   process.nextstick  promise在这三个阶段中间执行前者优于后者执行
 * session 的 store 有四个常用选项：1）内存 2）cookie 3）缓存 4）数据库  
-* iview的form表单，autoComplete属性是自动填充默认值到输入框里
 * process.env 是读取系统环境变量的，比如你在启动服务的时候，设置环境变量为production或者development，那么在程序里面就可以通过process.env.ENVNAME获取，因为你在node命令窗口启动时没有设置相关的环境变量，所以就没办法获取到了，你可以试一下NODE_ENV=development node来启动命令窗口，然后应该就可以获取到了！https://segmentfault.com/a/1190000011683741
 * 静态文件 app.use(express.static(path.resolve(__dirname, './dist')));
 * node+vue https://juejin.im/entry/597006fa51882526426625d4
