@@ -1,20 +1,16 @@
 - 查看进程 `ps aux` `ps aux | grep xxx` `ps -ef`
 
+- 查看3000进程的PID `lsof -i:3000`
+
 - 解压 `.tgz => tar -zxvf`  `.tar.xz => xz -d`  `.tar.gz => tar -xzvf`  `.tar => tar -xvf`
 
-- 创建文件 `touch xxx`  创建文件夹 `mkdir xxx`
+- PATH是一个变量，它决定了 shell 将到哪些目录中寻找命令或程序。如果要执行的命令的目录在 $PATH 中，您就不必输入这个命令的完整路径，直接输入命令就可以了。添加路径export `PATH=$PATH:/some/directory`  `echo $PATH` 来看看到底有哪些目录被定义出来了 echo有『显示、印出』的意思，而 PATH 前面加的 $ 表示后面接的是变量，所以会显示出目前的 PATH 。如果当命令xx没有在PATH中，需进入xx所在的文件，执行./xx才可执行。`source  ~/.bashrc` 使其生效
 
-- 删除文件夹 `rm -rf`
-
-- 查看当前路径 `pwd`
-
-- PATH是一个变量，它决定了 shell 将到哪些目录中寻找命令或程序。如果要执行的命令的目录在 $PATH 中，您就不必输入这个命令的完整路径，直接输入命令就可以了。添加路径export `PATH=$PATH:/some/directory`  `echo $PATH` 来看看到底有哪些目录被定义出来了 echo有『显示、印出』的意思，而 PATH 前面加的 $ 表示后面接的是变量，所以会显示出目前的 PATH 。如果当命令xx没有在PATH中，需进入xx所在的文件，执行./xx才可执行。`source  ~/.bashrc` 使其生效，
+- source 是bash shell的内置命令。点命令，就是个点符号 . 通常用于重新执行刚修改的初始化文档，如 .bash_profile 和 .profile 等等
 
 - alias lm='ls -al' 代理命令
 
 - zsh脚本文件位置  `~/.zshrc`
-
-- 查看3000进程的PID `lsof -i:3000`
 
 - 修改文件夹名字 `mv oldname newname`
 

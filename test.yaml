@@ -1,0 +1,23 @@
+apps:
+  - script: ./server/index.js
+    name: 'nodeServer'
+    env:
+      COMMON_VARIABLE: true
+    env_production:
+      NODE_ENV: production
+deploy:
+  production:
+    user: root
+    host:
+      - xxx.xxx.xx.xx
+      port: 80
+      ref: origin/master
+      repo:
+        git@github.xxxx.git
+      path:
+        /www/giliwu
+      ssh_options: StrictHostKeyChecking=no
+      pre-deploy: git pull
+      post-deploy: 'yarn && yarn build && pm2 startOrRestart deploy.yaml --env production'
+      env:
+        NODE_ENV: production

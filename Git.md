@@ -63,3 +63,5 @@
 - `git push --tags` 把所有tag推送到远程仓库
 
 - `git push origin :refs/tags/<tagname>` 删除远程tag
+
+- 新生成 ssh key `ssh-keygen -t rsa -b 4096 -C "your_email@example.com"`

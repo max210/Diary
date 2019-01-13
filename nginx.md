@@ -2,9 +2,12 @@
 http://seanlook.com/2015/05/17/nginx-install-and-config/
 https://www.zybuluo.com/phper/note/89391
 
-* 启动 sudo nginx -s reload
-* 停止 sudo nginx -s stop
-* 检查 nginx -t 检查配置 nginx -t -c /etc/nginx/nginx.conf
+- 安装 apt-get install nginx
+- 主配置目录 /etc/nginx/nginx.conf，其中可以修改`server_token off;` 来隐藏nginx版本号
+- 自定义配置目录 /etc/nginx/conf.d/xxx.conf, 需要在/etc/nginx/nginx.conf 中指定 `include /etc/nginx/conf.d/*.conf`
+- 启动 sudo nginx -s reload
+- 停止 sudo nginx -s stop
+- 检查 nginx -t 检查配置 nginx -t -c /etc/nginx/nginx.conf
 
 - 配置（主要分为六个区域：main(全局设置)、events(nginx工作模式)、http(http设置)、sever(主机设置)、location(URL匹配)、upstream(负载均衡服务器设置)）
 ```
@@ -51,35 +54,49 @@ http {
 
   # 用来定一个虚拟主机
   server {
-    listen       8080; # 指定虚拟主机的服务端口
-    server_name  localhost 192.168.12.10 www.max210.com; # 用来指定IP地址或者域名，多个域名之间用空格分开
+    listen       80; # 指定虚拟主机的服务端口
+    server_name  192.168.12.10 www.max210.com; # 用来指定IP地址或者域名，多个域名之间用空格分开
     root         /Users/maximilian/www; # 表示在这整个server虚拟主机内，全部的root web根目录
     index        index.php index.html index.htm;  # 全局定义访问的默认首页地址
     charset      utf-8; # 设置网页的默认编码格式
 
     # 负载均衡啊、反向代理、虚拟域名相关(location / 表示匹配访问根目录, 开启正则匹配这样：location ~)
     location / {
-      root   /Users/maximilian/www; # 指定访问根目录时，虚拟主机的web目录
-      index  index.html; # 设定只输入域名后访问的默认首页地址
-      try_files $uri $uri/ /index.html; # 避免单页面刷新404
+      root              /Users/maximilian/www; # 指定访问根目录时，虚拟主机的web目录
+      index             index.html; # 设定只输入域名后访问的默认首页地址
+      try_files         $uri $uri/ /index.html; # 避免单页面刷新404
+
+      # 如果是前后的一体项目，可以做代理
+      proxy_set_header  X-Real-Ip $remote_addr;
+      proxy_set_header  X-Forward-For $proxy_add_x_forwarded_for;
+      proxy_set_header  Host $http_host;
+      proxy_set_header  X-Nginx-Proxy true;
+      proxy_pass        http://testname; # 代理到upstream为testname去
+      proxy_redirect    off;
     }
 
-    # location ~ \.php$ {
-      # root           /Users/yangyi/www;
-      # fastcgi_pass   127.0.0.1:9000;
-      # fastcgi_index  index.php;
-      # include        fastcgi.conf;
-    # }
+    location /api {
+      proxy_set_header  X-Real-Ip $remote_addr;
+      proxy_set_header  X-Forward-For $proxy_add_x_forwarded_for;
+      proxy_set_header  Host $http_host;
+      proxy_set_header  X-Nginx-Proxy true;
+      proxy_pass        http://testname; # 代理到upstream为testname去
+      proxy_redirect    off;
+    }
+
+    location ~* ^.+\.(html|jpg|jpeg|gif|png|ico|css|js|pdf|txt) {
+      root   /Users/maximilian/www
+    }
   }
 
-  # 指定一个负载均衡器的名称max210.com
-  # upstream max210.com {
-    # ip_hash; # 一种负载均衡调度算法
-    # server 192.168.12.1:80;
-    # server 192.168.12.2:80 down; # down表示当前的server暂时不参与负载均衡
-    # server 192.168.12.3:8080  max_fails=3  fail_timeout=20s;
-    # server 192.168.12.4:8080;
-  # }
+  # 指定一个负载均衡器的名称testname
+  upstream testname {
+    ip_hash; # 一种负载均衡调度算法
+    server 192.168.12.1:80;
+    server 192.168.12.2:80 down; # down表示当前的server暂时不参与负载均衡
+    server 192.168.12.3:8080  max_fails=3  fail_timeout=20s;
+    server 192.168.12.4:8080;
+  }
 
 }
 ```

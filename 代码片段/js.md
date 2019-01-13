@@ -1,17 +1,28 @@
-- 校验
+- 校验与过滤
 ```
 手机号：(/^(\+?0?86-?)?1[3456789]\d{9}$/).test(phone)
 ```
 ```
-手机号：(/^\d{4}$/).test(code)
+验证码：(/^\d{4}$/).test(code)
 ```
 ```
 邮箱：(/^([0-9A-Za-z.\-_]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/).test(email)
 ```
 ```
+身份证号码：/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+```
+```
 金额两位小数：money.replace(/[^\d.]/g, '').replace(/^\./g, '').replace(/\.{2,}/g, '.').replace('.', '$#$').replace(/\./g, '').replace('$#$', '.').replace(/^(-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
 ```
-- 滚动特殊处理
+```
+过滤表情：xxx.replace(/(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|\ud83c[\ude32-\ude3a]|\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g, '')
+```
+
+```
+中英文字符长度：xxx.replace(/[^\x00-\xff]/g, '**').length
+```
+
+- 获取滚动距离兼容写法
 ```
 const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
 ```
@@ -33,28 +44,27 @@ function listenLine () {
 ```
 - 生产根据日期分组的数据
 ```
-function dealWith() {
+function dealWith(data) {
   let result = []
-  for (let i = 0; i < originData.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     let obj = {time: '', monthList: []}
     let isNewItem = true
-    originData[i].monthTime = formatDate(new Date(originData[i].createTime), 'yyyy年MM月')
-    originData[i].detailTime = formatDate(new Date(originData[i].createTime), 'yyyy年MM月dd日 hh:mm')
+    data[i].monthTime = dayjs(data[i].createTime).format('yyyy年MM月)
     if (this.page === 1 && i === 0) {
-      obj.time = originData[i].monthTime
-      obj.monthList.push(originData[i])
+      obj.time = data[i].monthTime
+      obj.monthList.push(data[i])
       result.push(obj)
     } else {
       for (let j = 0; j < result.length; j++) {
-        if (result[j].time === originData[i].monthTime) {
-          result[j].monthList.push(originData[i])
+        if (result[j].time === data[i].monthTime) {
+          result[j].monthList.push(data[i])
           isNewItem = false
           break
         }
       }
       if (isNewItem) {
-        obj.time = originData[i].monthTime
-        obj.monthList.push(originData[i])
+        obj.time = data[i].monthTime
+        obj.monthList.push(data[i])
         result.push(obj)
       }
     }
@@ -70,16 +80,15 @@ inputChange (e) {
     return
   }
   toast.loading.show()
-  this.file = e.target.files[0]
-  this.$refs.cameraInput.value = '' // 兼容个别浏览器不会重复触发input的change事件
-  console.log('this.file', this.file)
+  let file = e.target.files[0]
+  // this.$refs.cameraInput.value = '' // 兼容个别浏览器不会重复触发input的change事件
 
   let reader = new FileReader()
-  reader.readAsDataURL(this.file)
+  reader.readAsDataURL(file)
   reader.onload = e => {
-    this.imgUnloadSrc = e.target.result
+    const imgUnloadSrc = e.target.result // 缩略图地址
     let image = new Image()
-    image.src = e.target.result
+    image.src = imgUnloadSrc
     image.onload = () => {
       const maxSize = 500 * 1024 // 500KB
       if (this.file.size > maxSize) {
@@ -98,7 +107,7 @@ compressImg (image) {
   canvas.height = image.height
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
 
-  let base64 = canvas.toDataURL(this.file.type || 'image/jpeg', 0.1) // image/jpeg 兼容部分安卓出现获取不到type的情况
+  let base64 = canvas.toDataURL(this.file.type || 'image/jpeg', 0.1) // image/jpeg 兼容部分安卓出现获取不到type的情况 压缩比例0.1
 
   // base64转为blob
   let binaryString = window.atob(base64.split(',')[1])
