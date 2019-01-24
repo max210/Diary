@@ -1,12 +1,12 @@
 * 查看版本  docker version
-* 开启docker  sudo service docker start
-* 列出本地对iamge文件  docker image ls
-* 删除特定对image文件  docker image rm [imageName]
+* 启动 docker  sudo service docker start
+* 列出本地的 iamge 文件  docker image ls
+* 删除特定的 image 文件  docker image rm [imageName]
 * 将 image 文件从仓库抓取到本地  docker image pull [imageName]
 * 新建一个容器，执行一次生个一个  docke run [imageName]  开启特定的容器 docker start [id]
-* docker ps 确认一下库已经正常运行起来
-* 列出正在运行的容器  docker ls
-* 立即杀死特定的容器  docker kill [container ID]   妥善关闭特定的容器 docker stop [id]
+* 查看当前的运行 docker ps
+* 列出正在运行的容器  docker ls [--all]
+* 立即杀死特定的容器  docker kill [container id]   妥善关闭特定的容器 docker stop [container id]
 
 - Ubuntu 14.04/16.04 (使用apt-get进行安装)
 ```
@@ -32,3 +32,9 @@ sudo yum -y install docker-ce
 # Step 4: 开启Docker服务
 sudo service docker start
 ```
+- 进入到容器
+$ sudo docker exec -it  [docker-id or docker-name] /bin/bash
+- 从容器中拷贝文件到宿主机
+$ docker cp contaienr-name:/folder/file ./
+- 从宿主机拷贝文件到容器
+$ docker cp ./file container-name:/folder

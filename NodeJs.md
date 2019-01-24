@@ -1,4 +1,3 @@
-
 * 对db er模型的理解 mongodb mysql 对应的node模块， nginx事务，os 算法 数据结构 设计模式 编译原理   《node in action》 《深入浅出Node.js》 《更了不起的Node.js》
 * promise中有process.nextTick,promise先执行完在执行process.nextTick   这两个函数都是在六个循环阶段切换时执行  执行顺序简化为三个阶段，1.settimeout 2 异步IO 3 setimmediat（）   process.nextstick  promise在这三个阶段中间执行前者优于后者执行
 * session 的 store 有四个常用选项：1）内存 2）cookie 3）缓存 4）数据库  

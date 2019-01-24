@@ -1,0 +1,59 @@
+- 上传文件  formdata
+
+- 前端  blob(二进制类型的大对象)或文件(继承自Blob) 对象转为 base64
+
+  readFile  对象用于读取文件（读取单个对象文件，所以，不能直接读取 Filelist 对象文件集合），即把文件内容读入内存。它接收 File 对象或 Blob 对象，作为参数
+
+  ```javascript
+  input.onchange = function(e) {
+    let file = e.target.files[0]
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = function () {
+      console.log(reader.result)
+    }
+  }
+  ```
+
+  - readAsBinaryString(Blob|File)：返回二进制字符串，该字符串每个字节包含一个 0 到 255 之间的整数。
+  - readAsText(Blob|File, opt_encoding) ：返回文本字符串。默认情况下，文本编码格式是'UTF-8'，可以通过可选的格式参数，指定其他编码格式的文本。
+  - readAsDataURL(Blob|File)：返回一个基于 Base64 编码的 data-uri 对象。
+  - readAsArrayBuffer(Blob|File) ：返回一个 ArrayBuffer（二进制数组）对象。
+  - abort()：该方法用于中止文件上传。
+
+- 前端 base64 转 blob对象
+
+  ```javascript
+    // base64转为blob
+    let arr = base64.split(',')
+    let fileType = arr[0].match(/:(.*?);/)[1]
+    let binaryString = window.atob(arr[1])
+    let arrayBuffer = new ArrayBuffer(binaryString.length)
+    let intArray = new Uint8Array(arrayBuffer)
+  
+    for (let i = 0; i < binaryString.length; i++) {
+      intArray[i] = binaryString.charCodeAt(i)
+    }
+  
+    let blob
+  
+    try {
+      blob = new Blob([intArray], { type: fileType })
+    } catch (error) {
+      let BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder
+      if (error.name === 'TypeError' && window.BlobBuilder) {
+        let builder = new BlobBuilder()
+        builder.append(arrayBuffer)
+        blob = builder.getBlob()
+      } else {
+        console.log('版本过低，不支持上传图片')
+        return
+      }
+    }
+  ```
+
+- 前端 blob 对象转 file
+
+  ```javascript
+  let files = new window.File([blob], file.name, {type: fileType})
+  ```
