@@ -6,7 +6,7 @@ HTTP包括http请求和http响应
 * 请求头
 * 请求体
 
-请求头中`Content-Type`的值常见的有`application/x-www-form-urlencoded`和`application/json`。
+请求头中`Content-Type`的值常见的有`application/x-www-form-urlencoded`和`application/json`以及`multipart/form-data`。
 
 浏览器的原生`<form>`表单，如果不设置`enctype`属性，那么最终就会以`application/x-www-form-urlencoded`方式提交数据，提交的数据按照 `key1=val1&key2=val2`的方式进行编码，`key`和`val`都进行了`URL`转码：
 
@@ -25,6 +25,8 @@ Content-Type: application/json;charset=utf-8
 
 {"title":"test","sub":[1,2,3]}
 ```
+
+我们使用表单上传文件时，必须让 <form> 表单的 `enctype` 等于 multipart/form-data
 
 ##### http响应包括：
 
