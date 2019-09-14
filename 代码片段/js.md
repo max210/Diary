@@ -19,6 +19,15 @@
 ```
 
 ```
+// 抓取当前请求协议
+const origin = ctx.header.origin;
+let matcht = /^(https?:\/\/)([0-9a-z.]+)(:[0-9]+)?([/0-9a-z.]+)?(\?[0-9a-z&=]+)?(#[0-9-a-z]+)?/i;
+let hostInfo = matcht.exec(origin);
+// ['完整URL', '协议', '地址', '端口', '路径', '查询', '锚点']
+let protocol = hostInfo[1];
+```
+
+```
 中英文字符长度：xxx.replace(/[^\x00-\xff]/g, '**').length
 ```
 
